@@ -29,17 +29,6 @@ export const InfoSection = () => {
           </Heading>
           <Timeline />
         </Box>
-
-        <Box>
-          <Heading size="md" color={headingColor} mb={2}>
-            Registration Fee
-          </Heading>
-          <Text color={textColor}>
-            Research Scholars: ₹1,500
-            <br />
-            Academia: ₹2,500
-          </Text>
-        </Box>
       </VStack>
     </Box>
   );

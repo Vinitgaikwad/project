@@ -73,30 +73,13 @@ export const RegistrationForm = () => {
             placeholder="Enter your WhatsApp number"
           />
         </FormControl>
-
-        <FormControl isRequired>
-          <FormLabel>VU Account Number</FormLabel>
-          <Input
-            {...register('vuAccountNumber', { required: true })}
-            placeholder="Enter your VU account number"
-          />
-        </FormControl>
-
-        <FormControl isRequired>
-          <FormLabel>Transaction ID</FormLabel>
-          <Input
-            {...register('transactionId', { required: true })}
-            placeholder="Enter payment transaction ID"
-          />
-        </FormControl>
-
-        <FormControl isRequired>
-          <FormLabel>Transaction Receipt</FormLabel>
-          <Input
-            type="file"
-            accept="image/*,.pdf"
-            {...register('transactionReceipt', { required: true })}
-          />
+        <FormControl>
+          <FormLabel>VU Account Number (optional)</FormLabel>
+          <Select {...register('vuAccountNumber')}>
+            <option value="" disabled selected hidden>Select Account Number</option> {/* Changed duplicate value */}
+            <option value="Acc-1">3127636236</option>
+            <option value="Acc-2">3179187398</option>
+          </Select>
         </FormControl>
 
         <Text>
