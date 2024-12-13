@@ -118,7 +118,6 @@ export const AuthTabs: React.FC = () => {
                   colorScheme="brand"
                   width="100%"
                   _hover={{ bg: 'brand.600' }}
-
                 >
                   Login
                 </Button>
