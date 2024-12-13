@@ -12,31 +12,31 @@ import {
   VStack,
   useToast,
   useColorModeValue,
-  Text,
   Alert,
-  AlertIcon,
+  AlertIcon
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { RegistrationForm } from './RegistrationForm';
 import { FirebaseError } from 'firebase/app';
 
-export const AuthTabs = () => {
+export const AuthTabs: React.FC = () => {
+  const toast = useToast();
+  const { login } = useAuth();
+
+  const bgColor = useColorModeValue('white', 'gray.800');
+  const borderColor = useColorModeValue('brand.200', 'brand.700');
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  
-  const toast = useToast();
-  const { login } = useAuth();
-  
-  const bgColor = useColorModeValue('white', 'gray.800');
-  const borderColor = useColorModeValue('gray.200', 'gray.600');
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    
+
+
     try {
       setLoading(true);
       await login(email, password);
@@ -66,11 +66,19 @@ export const AuthTabs = () => {
   };
 
   return (
-    <Box bg={bgColor} p={8} borderRadius="lg" shadow="lg" width="100%" borderColor={borderColor} borderWidth="1px">
-      <Tabs isFitted variant="soft-rounded" colorScheme="blue">
+    <Box
+      bg={bgColor}
+      p={8}
+      borderRadius="lg"
+      shadow="lg"
+      width="100%"
+      borderColor={borderColor}
+      borderWidth="1px"
+    >
+      <Tabs isFitted variant="soft-rounded" colorScheme="brand">
         <TabList mb="1em">
-          <Tab>Login</Tab>
-          <Tab>Register</Tab>
+          <Tab _selected={{ bg: 'brand.500', color: 'white' }}>Login</Tab>
+          <Tab _selected={{ bg: 'brand.500', color: 'white' }}>Register</Tab>
         </TabList>
         <TabPanels>
           <TabPanel>
@@ -83,31 +91,33 @@ export const AuthTabs = () => {
             <form onSubmit={handleLogin}>
               <VStack spacing={4}>
                 <FormControl isRequired>
-                  <FormLabel>Email</FormLabel>
-                  <Input 
-                    type="email" 
+                  <FormLabel>Username</FormLabel>
+                  <Input
+                    type="email"
+                    placeholder="Enter your username"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Enter your email"
                     isDisabled={loading}
+                    focusBorderColor="brand.500"
+
                   />
                 </FormControl>
                 <FormControl isRequired>
                   <FormLabel>Password</FormLabel>
-                  <Input 
-                    type="password" 
+                  <Input
+                    type="password"
+                    placeholder="Enter your password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Enter your password"
                     isDisabled={loading}
+                    focusBorderColor="brand.500"
                   />
                 </FormControl>
-                <Button 
-                  type="submit" 
-                  colorScheme="blue" 
+                <Button
+                  type="submit"
+                  colorScheme="brand"
                   width="100%"
-                  isLoading={loading}
-                  loadingText="Logging in..."
+                  _hover={{ bg: 'brand.600' }}
                 >
                   Login
                 </Button>

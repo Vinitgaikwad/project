@@ -1,10 +1,11 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { 
+import {
   User,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged
+
 } from 'firebase/auth';
 import { auth } from '../config/firebase';
 
@@ -14,6 +15,7 @@ interface AuthContextType {
   signup: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   loading: boolean;
+
 }
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
@@ -58,4 +60,5 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       {!loading && children}
     </AuthContext.Provider>
   );
+
 }; 

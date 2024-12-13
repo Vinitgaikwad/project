@@ -27,7 +27,7 @@ export const RegistrationForm = () => {
     whatsappNumber: '',
     vuAccountNumber: '',
   });
-  
+
   const toast = useToast();
   const { signup } = useAuth();
 
@@ -42,17 +42,14 @@ export const RegistrationForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    
     if (formData.password.length < 6) {
       setError('Password must be at least 6 characters long');
       return;
     }
-    
     try {
       setLoading(true);
       await signup(formData.email, formData.password);
       // Here you would typically also save the additional user data to your database
-      
       toast({
         title: 'Registration Successful',
         description: "You've successfully registered. Please check your email for verification.",
@@ -87,7 +84,6 @@ export const RegistrationForm = () => {
             {error}
           </Alert>
         )}
-        
         <FormControl isRequired>
           <FormLabel>Email</FormLabel>
           <Input
@@ -97,6 +93,8 @@ export const RegistrationForm = () => {
             onChange={handleChange}
             placeholder="Enter your email"
             isDisabled={loading}
+            focusBorderColor="brand.500"
+
           />
         </FormControl>
 
@@ -108,6 +106,7 @@ export const RegistrationForm = () => {
             value={formData.password}
             onChange={handleChange}
             placeholder="Enter your password"
+            focusBorderColor="brand.500"
             isDisabled={loading}
           />
         </FormControl>
@@ -119,6 +118,7 @@ export const RegistrationForm = () => {
             value={formData.name}
             onChange={handleChange}
             placeholder="Enter your full name"
+            focusBorderColor="brand.500"
             isDisabled={loading}
           />
         </FormControl>
@@ -129,6 +129,7 @@ export const RegistrationForm = () => {
             name="category"
             value={formData.category}
             onChange={handleChange}
+            focusBorderColor="brand.500"
             isDisabled={loading}
           >
             <option value="Research Scholar">Research Scholar</option>
@@ -142,6 +143,7 @@ export const RegistrationForm = () => {
             name="affiliation"
             value={formData.affiliation}
             onChange={handleChange}
+            focusBorderColor="brand.500"
             placeholder="Full name and address of the Affiliation"
             isDisabled={loading}
           />
@@ -153,22 +155,22 @@ export const RegistrationForm = () => {
             name="whatsappNumber"
             value={formData.whatsappNumber}
             onChange={handleChange}
+            focusBorderColor="brand.500"
             placeholder="Enter your WhatsApp number"
             isDisabled={loading}
           />
         </FormControl>
+
         <FormControl>
           <FormLabel>VU Account Number (optional)</FormLabel>
-          <Select
-            name="vuAccountNumber"
-            value={formData.vuAccountNumber}
+          <Input
+            name="whatsappNumber"
+            value={formData.whatsappNumber}
             onChange={handleChange}
+            focusBorderColor="brand.500"
+            placeholder="Enter your VU Account Number"
             isDisabled={loading}
-          >
-            <option value="" disabled selected hidden>Select Account Number</option>
-            <option value="Acc-1">3127636236</option>
-            <option value="Acc-2">3179187398</option>
-          </Select>
+          />
         </FormControl>
 
         <Text>
@@ -180,9 +182,9 @@ export const RegistrationForm = () => {
 
         <Button
           type="submit"
-          colorScheme="blue"
-          size="lg"
+          colorScheme="brand"
           width="100%"
+          _hover={{ bg: 'brand.600' }}
           isLoading={loading}
           loadingText="Creating Account..."
         >
