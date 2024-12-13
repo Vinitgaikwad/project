@@ -35,12 +35,18 @@ export const RegistrationForm = () => {
           <Input
             {...register('name', { required: true })}
             placeholder="Enter your full name"
+            focusBorderColor="brand.500"
           />
         </FormControl>
 
         <FormControl isRequired>
           <FormLabel>Participant Category</FormLabel>
-          <Select {...register('category', { required: true })}>
+          <Select
+            {...register('category', { required: true })}
+            defaultValue=""
+            focusBorderColor="brand.500"
+          >
+            <option value="" disabled>Select Category</option>
             <option value="Research Scholar">Research Scholar</option>
             <option value="Academia">Academia</option>
           </Select>
@@ -51,6 +57,7 @@ export const RegistrationForm = () => {
           <Input
             {...register('affiliation', { required: true })}
             placeholder="Full name and address of the Affiliation"
+            focusBorderColor="brand.500"
           />
         </FormControl>
 
@@ -63,6 +70,7 @@ export const RegistrationForm = () => {
             })}
             type="email"
             placeholder="Enter your email"
+            focusBorderColor="brand.500"
           />
         </FormControl>
 
@@ -71,15 +79,17 @@ export const RegistrationForm = () => {
           <Input
             {...register('whatsappNumber', { required: true })}
             placeholder="Enter your WhatsApp number"
+            focusBorderColor="brand.500"
           />
         </FormControl>
+
         <FormControl>
-          <FormLabel>VU Account Number (optional)</FormLabel>
-          <Select {...register('vuAccountNumber')}>
-            <option value="" disabled selected hidden>Select Account Number</option> {/* Changed duplicate value */}
-            <option value="Acc-1">3127636236</option>
-            <option value="Acc-2">3179187398</option>
-          </Select>
+          <FormLabel>Account Number</FormLabel>
+          <Input
+            {...register('vuAccountNumber')}
+            placeholder="Enter your WhatsApp number"
+            focusBorderColor="brand.500"
+          />
         </FormControl>
 
         <Text>
@@ -91,9 +101,9 @@ export const RegistrationForm = () => {
 
         <Button
           type="submit"
-          colorScheme="blue"
-          size="lg"
+          colorScheme="brand"
           width="100%"
+          _hover={{ bg: 'brand.600' }}
         >
           Submit Registration
         </Button>

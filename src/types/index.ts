@@ -10,3 +10,7 @@ export interface RegistrationFormData {
   transactionId: string;
   transactionReceipt: File | null;
 }
+
+export interface AuthTabsProps {
+  setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
+}
