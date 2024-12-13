@@ -36,6 +36,7 @@ export const AuthTabs: React.FC = () => {
     e.preventDefault();
     setError('');
 
+
     try {
       setLoading(true);
       await login(email, password);
@@ -98,6 +99,7 @@ export const AuthTabs: React.FC = () => {
                     onChange={(e) => setEmail(e.target.value)}
                     isDisabled={loading}
                     focusBorderColor="brand.500"
+
                   />
                 </FormControl>
                 <FormControl isRequired>
@@ -116,6 +118,7 @@ export const AuthTabs: React.FC = () => {
                   colorScheme="brand"
                   width="100%"
                   _hover={{ bg: 'brand.600' }}
+
                 >
                   Login
                 </Button>

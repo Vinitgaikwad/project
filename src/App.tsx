@@ -1,3 +1,4 @@
+
 import { Box, Container, Grid, useColorModeValue } from '@chakra-ui/react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { InfoSection } from './components/InfoSection';
