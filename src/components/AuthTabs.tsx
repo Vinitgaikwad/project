@@ -12,40 +12,55 @@ import {
   VStack,
   useToast,
   useColorModeValue,
+  Alert,
+  AlertIcon
 } from '@chakra-ui/react';
 import { useState } from 'react';
+import { useAuth } from '../contexts/AuthContext';
 import { RegistrationForm } from './RegistrationForm';
+import { FirebaseError } from 'firebase/app';
 
-interface AuthTabsProps {
-  setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-export const AuthTabs: React.FC<AuthTabsProps> = ({ setIsAuthenticated }) => {
+export const AuthTabs: React.FC = () => {
   const toast = useToast();
+  const { login } = useAuth();
+
   const bgColor = useColorModeValue('white', 'gray.800');
   const borderColor = useColorModeValue('brand.200', 'brand.700');
 
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
 
-    if (username === 'project' && password === '123456') {
-      setIsAuthenticated(true);
+    try {
+      setLoading(true);
+      await login(email, password);
       toast({
         title: 'Login Successful',
         status: 'success',
         duration: 3000,
         isClosable: true,
       });
-    } else {
-      toast({
-        title: 'Invalid Credentials',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      });
+    } catch (err) {
+      if (err instanceof FirebaseError) {
+        switch (err.code) {
+          case 'auth/user-not-found':
+          case 'auth/wrong-password':
+            setError('Invalid email or password');
+            break;
+          case 'auth/too-many-requests':
+            setError('Too many failed attempts. Please try again later');
+            break;
+          default:
+            setError('Failed to log in');
+        }
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -66,15 +81,22 @@ export const AuthTabs: React.FC<AuthTabsProps> = ({ setIsAuthenticated }) => {
         </TabList>
         <TabPanels>
           <TabPanel>
+            {error && (
+              <Alert status="error" mb={4} borderRadius="md">
+                <AlertIcon />
+                {error}
+              </Alert>
+            )}
             <form onSubmit={handleLogin}>
               <VStack spacing={4}>
                 <FormControl isRequired>
                   <FormLabel>Username</FormLabel>
                   <Input
-                    type="text"
+                    type="email"
                     placeholder="Enter your username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    isDisabled={loading}
                     focusBorderColor="brand.500"
                   />
                 </FormControl>
@@ -85,6 +107,7 @@ export const AuthTabs: React.FC<AuthTabsProps> = ({ setIsAuthenticated }) => {
                     placeholder="Enter your password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    isDisabled={loading}
                     focusBorderColor="brand.500"
                   />
                 </FormControl>

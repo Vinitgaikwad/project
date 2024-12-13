@@ -16,11 +16,12 @@ import {
     Collapse,
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
-interface DashboardProps {
-    setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
+
+interface Props {
+    handleLogout: () => Promise<void>; // Type for the function passed as a prop
 }
 
-const Dashboard: React.FC<DashboardProps> = ({ setIsAuthenticated }) => {
+const Dashboard: React.FC<Props> = ({ handleLogout: onLogout }) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
@@ -73,7 +74,7 @@ const Dashboard: React.FC<DashboardProps> = ({ setIsAuthenticated }) => {
                                 size="lg"
                                 _hover={{ bg: 'red.600' }}
                                 boxShadow="md"
-                                onClick={() => { setIsAuthenticated(false) }}
+                                onClick={onLogout}
                             >
                                 Logout
                             </Button>

@@ -1,24 +1,32 @@
 import { Box, Container, Grid, useColorModeValue } from '@chakra-ui/react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { useState } from 'react';
 import { InfoSection } from './components/InfoSection';
 import { AuthTabs } from './components/AuthTabs';
 import { ColorModeToggle } from './components/ColorModeToggle';
 import Dashboard from './components/Dashboard';
+import { useAuth } from './contexts/AuthContext';
 
 function App() {
   const bgColor = useColorModeValue('gray.50', 'gray.900');
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { currentUser, logout } = useAuth();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (error) {
+      console.error('Failed to log out:', error);
+    }
+  };
 
   return (
     <Router>
       <Routes>
-        {/* Main page */}
+        {/* Main page (login page) */}
         <Route
           path="/"
           element={
-            isAuthenticated ? (
-              <Navigate to="/dashboard" replace />
+            currentUser ? (
+              <Navigate to="/dashboard" replace /> // Redirect to dashboard if logged in
             ) : (
               <Box bg={bgColor} minH="100vh" py={8}>
                 <ColorModeToggle />
@@ -29,7 +37,7 @@ function App() {
                     minHeight="90vh"
                   >
                     <InfoSection />
-                    <AuthTabs setIsAuthenticated={setIsAuthenticated} />
+                    <AuthTabs />
                   </Grid>
                 </Container>
               </Box>
@@ -41,10 +49,10 @@ function App() {
         <Route
           path="/dashboard"
           element={
-            isAuthenticated ? (
-              <Dashboard setIsAuthenticated={setIsAuthenticated} />
+            !currentUser ? (
+              <Navigate to="/" replace /> // Redirect to login page if not logged in
             ) : (
-              <Navigate to="/" replace />
+              <Dashboard handleLogout={handleLogout} />
             )
           }
         />
