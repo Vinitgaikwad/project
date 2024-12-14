@@ -5,7 +5,6 @@ import {
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged
-
 } from 'firebase/auth';
 import { auth } from '../config/firebase';
 
@@ -15,7 +14,6 @@ interface AuthContextType {
   signup: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   loading: boolean;
-
 }
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
@@ -31,10 +29,36 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const login = async (email: string, password: string) => {
+    // Check for dummy credentials first
+    if (email === 'project' && password === '123456') {
+      // Create a mock user object that mimics Firebase User structure
+      const dummyUser = {
+        uid: 'dummy-uid',
+        email: 'project@example.com',
+        displayName: 'Project User',
+        emailVerified: true,
+        isAnonymous: false,
+        metadata: {
+          creationTime: new Date().toISOString(),
+          lastSignInTime: new Date().toISOString(),
+        },
+      } as User;
+
+      setCurrentUser(dummyUser);
+      return;
+    }
+
+    // If not dummy credentials, proceed with Firebase authentication
     await signInWithEmailAndPassword(auth, email, password);
   };
 
   const logout = async () => {
+    // Check if it's the dummy user
+    if (currentUser?.uid === 'dummy-uid') {
+      setCurrentUser(null);
+      return;
+    }
+    // Otherwise, proceed with Firebase logout
     await signOut(auth);
   };
 
@@ -60,5 +84,4 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       {!loading && children}
     </AuthContext.Provider>
   );
-
-}; 
+};

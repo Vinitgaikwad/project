@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { TestDashboard } from "./TestDashboard";
 import {
     Box,
     Flex,
@@ -12,20 +11,20 @@ import {
     Button,
     VStack,
     useColorModeValue,
-    Text,
-    Collapse,
+    Collapse
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
+import { HomeTab } from './dashboard/HomeTab';
+import { AnalyticsTab } from './dashboard/AnalyticsTab';
+import { TestDashboard } from './dashboard/TestDashboard';
+import { ReportsTab } from './dashboard/ReportsTab';
 
 interface Props {
-    handleLogout: () => Promise<void>; // Type for the function passed as a prop
+    handleLogout: () => Promise<void>;
 }
 
-const Dashboard: React.FC<Props> = ({ handleLogout: onLogout }) => {
+const Dashboard: React.FC<Props> = ({ handleLogout }) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-    const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
-
     const sidebarBg = useColorModeValue('brand.50', 'gray.800');
     const mainBg = useColorModeValue('gray.50', 'gray.900');
     const buttonHoverBg = useColorModeValue('brand.100', 'brand.800');
@@ -33,7 +32,6 @@ const Dashboard: React.FC<Props> = ({ handleLogout: onLogout }) => {
 
     return (
         <Flex h="100vh" bg={mainBg}>
-            {/* Sidebar */}
             <Box
                 bg={sidebarBg}
                 w={isSidebarOpen ? '240px' : '70px'}
@@ -45,7 +43,7 @@ const Dashboard: React.FC<Props> = ({ handleLogout: onLogout }) => {
                     <IconButton
                         aria-label="Toggle Sidebar"
                         icon={isSidebarOpen ? <CloseIcon /> : <HamburgerIcon />}
-                        onClick={toggleSidebar}
+                        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
                         mt={4}
                         mx={4}
                         size="lg"
@@ -72,9 +70,9 @@ const Dashboard: React.FC<Props> = ({ handleLogout: onLogout }) => {
                                 colorScheme="red"
                                 w="full"
                                 size="lg"
+                                onClick={handleLogout}
                                 _hover={{ bg: 'red.600' }}
                                 boxShadow="md"
-                                onClick={onLogout}
                             >
                                 Logout
                             </Button>
@@ -83,54 +81,35 @@ const Dashboard: React.FC<Props> = ({ handleLogout: onLogout }) => {
                 </VStack>
             </Box>
 
-            {/* Main Content */}
             <Box flex="1" p={4}>
-                <Tabs
-                    isFitted
-                    variant="soft-rounded"
-                    colorScheme="brand"
-                    borderRadius="md"
-                    boxShadow="lg"
-                >
+                <Tabs isFitted variant="soft-rounded" colorScheme="brand">
                     <TabList>
-                        <Tab
-                            _hover={{ bg: tabHoverBg }}
-                            _selected={{ bg: 'brand.500', color: 'white' }}
-                        >
+                        <Tab _hover={{ bg: tabHoverBg }} _selected={{ bg: 'brand.500', color: 'white' }}>
                             Home
                         </Tab>
-                        <Tab
-                            _hover={{ bg: tabHoverBg }}
-                            _selected={{ bg: 'brand.500', color: 'white' }}
-                        >
+                        <Tab _hover={{ bg: tabHoverBg }} _selected={{ bg: 'brand.500', color: 'white' }}>
                             Analytics
                         </Tab>
-                        <Tab
-                            _hover={{ bg: tabHoverBg }}
-                            _selected={{ bg: 'brand.500', color: 'white' }}
-                        >
+                        <Tab _hover={{ bg: tabHoverBg }} _selected={{ bg: 'brand.500', color: 'white' }}>
                             Tests
                         </Tab>
-                        <Tab
-                            _hover={{ bg: tabHoverBg }}
-                            _selected={{ bg: 'brand.500', color: 'white' }}
-                        >
+                        <Tab _hover={{ bg: tabHoverBg }} _selected={{ bg: 'brand.500', color: 'white' }}>
                             Reports
                         </Tab>
                     </TabList>
 
                     <TabPanels>
                         <TabPanel>
-                            <Text fontSize="lg">Welcome to the Home Tab!</Text>
+                            <HomeTab />
                         </TabPanel>
                         <TabPanel>
-                            <Text fontSize="lg">Analytics Overview</Text>
+                            <AnalyticsTab />
                         </TabPanel>
                         <TabPanel>
                             <TestDashboard />
                         </TabPanel>
                         <TabPanel>
-                            <Text fontSize="lg">Reports Section</Text>
+                            <ReportsTab />
                         </TabPanel>
                     </TabPanels>
                 </Tabs>

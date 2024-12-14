@@ -13,7 +13,8 @@ import {
   useToast,
   useColorModeValue,
   Alert,
-  AlertIcon
+  AlertIcon,
+  Text,
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
@@ -35,7 +36,6 @@ export const AuthTabs: React.FC = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-
 
     try {
       setLoading(true);
@@ -93,13 +93,12 @@ export const AuthTabs: React.FC = () => {
                 <FormControl isRequired>
                   <FormLabel>Username</FormLabel>
                   <Input
-                    type="email"
+                    type="text"
                     placeholder="Enter your username"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     isDisabled={loading}
                     focusBorderColor="brand.500"
-
                   />
                 </FormControl>
                 <FormControl isRequired>
@@ -113,10 +112,14 @@ export const AuthTabs: React.FC = () => {
                     focusBorderColor="brand.500"
                   />
                 </FormControl>
+                <Text fontSize="sm" color="gray.500" alignSelf="start">
+                  Demo credentials: username: project, password: 123456
+                </Text>
                 <Button
                   type="submit"
                   colorScheme="brand"
                   width="100%"
+                  isLoading={loading}
                   _hover={{ bg: 'brand.600' }}
                 >
                   Login
