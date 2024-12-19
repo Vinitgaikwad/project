@@ -29,7 +29,7 @@ const StatusBadge = ({ status }: { status: Test['status'] }) => {
         completed: 'green',
         upcoming: 'blue',
         missed: 'red',
-        incomplete: 'yellow'
+        incomplete: 'yellow',
     };
 
     return (
@@ -48,11 +48,16 @@ export const TestDashboard = () => {
 
     return (
         <Container maxW="container.xl" py={8}>
-            {/* <Heading size="lg" mb={8} textAlign="center">Faculty Development Programme Tests</Heading> */}
-            <Grid templateColumns={{ base: '1fr', lg: '1fr 1fr' }} gap={8}>
+            <Grid
+                templateColumns={{ base: '1fr', lg: '1fr 1fr' }}
+                gap={8}
+                alignItems="start"
+            >
                 {/* Left Panel - Test List */}
                 <VStack align="stretch" spacing={4}>
-                    <Heading size="md" mb={4} color="brand.600">Available Tests</Heading>
+                    <Heading size="md" mb={4} color="brand.600">
+                        Available Tests
+                    </Heading>
                     {testData.map((test, index) => (
                         <MotionBox
                             key={test.id}
@@ -72,9 +77,15 @@ export const TestDashboard = () => {
                                 transition="all 0.2s"
                                 transform={selectedTest.id === test.id ? 'scale(1.02)' : 'scale(1)'}
                             >
-                                <Grid templateColumns="1fr auto" gap={4} alignItems="center">
+                                <Grid
+                                    templateColumns={{ base: '1fr', md: '1fr auto' }}
+                                    gap={4}
+                                    alignItems="center"
+                                >
                                     <VStack align="start" spacing={2}>
-                                        <Text fontWeight="bold" color={textColor}>{test.name}</Text>
+                                        <Text fontWeight="bold" color={textColor}>
+                                            {test.name}
+                                        </Text>
                                         <Text fontSize="sm" color={textColor}>
                                             {new Date(test.date).toLocaleDateString()} at{' '}
                                             {new Date(test.date).toLocaleTimeString()}
@@ -83,7 +94,12 @@ export const TestDashboard = () => {
                                     <VStack align="end" spacing={2}>
                                         <StatusBadge status={test.status} />
                                         {test.score !== undefined && (
-                                            <Text fontWeight="bold" color={test.score >= 70 ? 'green.500' : 'red.500'}>
+                                            <Text
+                                                fontWeight="bold"
+                                                color={
+                                                    test.score >= 70 ? 'green.500' : 'red.500'
+                                                }
+                                            >
                                                 Score: {test.score}%
                                             </Text>
                                         )}
@@ -99,6 +115,7 @@ export const TestDashboard = () => {
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.2 }}
+                    width={{ base: '100%', lg: 'auto' }}
                 >
                     <Box
                         p={6}
@@ -113,11 +130,17 @@ export const TestDashboard = () => {
                             <Text>{selectedTest.description}</Text>
 
                             <Box>
-                                <Heading size="sm" mb={3}>Resources</Heading>
+                                <Heading size="sm" mb={3}>
+                                    Resources
+                                </Heading>
                                 <List spacing={2}>
                                     {selectedTest.resources.map((resource, index) => (
                                         <ListItem key={index}>
-                                            <Link color="blue.500" href="#" _hover={{ textDecoration: 'underline' }}>
+                                            <Link
+                                                color="blue.500"
+                                                href="#"
+                                                _hover={{ textDecoration: 'underline' }}
+                                            >
                                                 {resource}
                                             </Link>
                                         </ListItem>
@@ -126,7 +149,9 @@ export const TestDashboard = () => {
                             </Box>
 
                             <Box>
-                                <Text fontWeight="bold" mb={2}>Test Information</Text>
+                                <Text fontWeight="bold" mb={2}>
+                                    Test Information
+                                </Text>
                                 <Text>
                                     Date: {new Date(selectedTest.date).toLocaleDateString()}
                                     <br />

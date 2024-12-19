@@ -1,11 +1,12 @@
-
 import { Box, Container, Grid, useColorModeValue } from '@chakra-ui/react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { InfoSection } from './components/InfoSection';
 import { AuthTabs } from './components/AuthTabs';
 import { ColorModeToggle } from './components/ColorModeToggle';
 import Dashboard from './components/Dashboard';
+import Profile from './components/Profile'; // Import the Profile component
 import { useAuth } from './contexts/AuthContext';
+import Settings from "./components/Settings";
 
 function App() {
   const bgColor = useColorModeValue('gray.50', 'gray.900');
@@ -29,19 +30,57 @@ function App() {
             currentUser ? (
               <Navigate to="/dashboard" replace /> // Redirect to dashboard if logged in
             ) : (
-              <Box bg={bgColor} minH="100vh" py={8}>
+              <Box bg={bgColor} minH="100vh" py={8} display="flex" flexDirection="column">
                 <ColorModeToggle />
-                <Container maxW="container.xl">
+                <Container
+                  maxW="container.xl"
+                  flex="1"
+                  display="flex"
+                  flexDirection="column"
+                >
                   <Grid
                     templateColumns={{ base: '1fr', lg: 'repeat(2, 1fr)' }}
                     gap={8}
-                    minHeight="90vh"
+                    flex="1"
+                    templateAreas={{
+                      base: `"auth"
+                             "info"`,
+                      lg: `"info auth"`
+                    }}
                   >
-                    <InfoSection />
-                    <AuthTabs />
+                    <Box
+                      gridArea="info"
+                      display="flex"
+                      flexDirection="column"
+                    >
+                      <Box flex="1">
+                        <InfoSection />
+                      </Box>
+                    </Box>
+                    <Box
+                      gridArea="auth"
+                      display="flex"
+                      flexDirection="column"
+                    >
+                      <Box flex="1">
+                        <AuthTabs />
+                      </Box>
+                    </Box>
                   </Grid>
                 </Container>
               </Box>
+            )
+          }
+        />
+
+        {/* Profile page */}
+        <Route
+          path="/profile"
+          element={
+            !currentUser ? (
+              <Navigate to="/" replace /> // Redirect to login page if not logged in
+            ) : (
+              <Profile handleLogout={handleLogout} /> // Render the Profile component
             )
           }
         />
@@ -54,6 +93,18 @@ function App() {
               <Navigate to="/" replace /> // Redirect to login page if not logged in
             ) : (
               <Dashboard handleLogout={handleLogout} />
+            )
+          }
+        />
+
+        {/* Dashboard page */}
+        <Route
+          path="/settings"
+          element={
+            !currentUser ? (
+              <Navigate to="/" replace />
+            ) : (
+              <Settings handleLogout={handleLogout} />
             )
           }
         />

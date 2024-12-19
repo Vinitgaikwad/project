@@ -74,6 +74,7 @@ export const AuthTabs: React.FC = () => {
       width="100%"
       borderColor={borderColor}
       borderWidth="1px"
+      height="100%"
     >
       <Tabs isFitted variant="soft-rounded" colorScheme="brand">
         <TabList mb="1em">
