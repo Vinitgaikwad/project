@@ -3,12 +3,6 @@ import {
     Box,
     Flex,
     IconButton,
-    Tabs,
-    TabList,
-    TabPanels,
-    Tab,
-    TabPanel,
-    Button,
     VStack,
     useColorModeValue,
     Drawer,
@@ -18,32 +12,36 @@ import {
     DrawerContent,
     DrawerCloseButton,
     useBreakpointValue,
-    Collapse
+    Collapse,
+    Button,
+    Heading,
+    FormControl,
+    FormLabel,
+    Switch,
+    Divider,
+    Text,
+    Select,
+    Stack,
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
-import { HomeTab } from './dashboard/HomeTab';
-import { AnalyticsTab } from './dashboard/AnalyticsTab';
-import { TestDashboard } from './dashboard/TestDashboard';
-import { ReportsTab } from './dashboard/ReportsTab';
 import { useNavigate } from 'react-router-dom';
 
 interface Props {
     handleLogout: () => Promise<void>;
 }
 
-const Dashboard: React.FC<Props> = ({ handleLogout }) => {
+const Settings: React.FC<Props> = ({ handleLogout }) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const sidebarBg = useColorModeValue('brand.50', 'gray.800');
     const mainBg = useColorModeValue('gray.50', 'gray.900');
     const buttonHoverBg = useColorModeValue('brand.100', 'brand.800');
-    const tabHoverBg = useColorModeValue('brand.50', 'brand.900');
     const navigate = useNavigate();
 
     const isMobile = useBreakpointValue({ base: true, lg: false });
 
     const navigateTo = (path: string) => {
         navigate(path);
-        setIsSidebarOpen(false); // Close the sidebar after navigation
+        setIsSidebarOpen(false);
     };
 
     const MobileSidebar = () => (
@@ -161,31 +159,84 @@ const Dashboard: React.FC<Props> = ({ handleLogout }) => {
             <DesktopSidebar />
             <Box
                 flex="1"
-                p={4}
-                pt={{ base: isMobile ? '60px' : 4, lg: 4 }}
+                p={6}
+                pt={{ base: isMobile ? '60px' : 6, lg: 6 }}
+                overflowY="auto"
             >
-                <Tabs isFitted variant="soft-rounded" colorScheme="brand">
-                    <TabList>
-                        <Tab _hover={{ bg: tabHoverBg }} _selected={{ bg: 'brand.500', color: 'white' }}>
-                            Analytics
-                        </Tab>
-                        <Tab _hover={{ bg: tabHoverBg }} _selected={{ bg: 'brand.500', color: 'white' }}>
-                            Tests
-                        </Tab>
-                    </TabList>
+                <VStack spacing={8} align="stretch">
+                    <Heading size="lg">Settings</Heading>
 
-                    <TabPanels>
-                        <TabPanel>
-                            <AnalyticsTab />
-                        </TabPanel>
-                        <TabPanel>
-                            <TestDashboard />
-                        </TabPanel>
-                    </TabPanels>
-                </Tabs>
+                    <Box>
+                        <Heading size="md" mb={4}>Appearance</Heading>
+                        <Stack spacing={4}>
+                            <FormControl display='flex' alignItems='center'>
+                                <FormLabel mb='0'>
+                                    Dark Mode
+                                </FormLabel>
+                                <Switch colorScheme='brand' />
+                            </FormControl>
+                            <FormControl>
+                                <FormLabel>Language</FormLabel>
+                                <Select defaultValue='english'>
+                                    <option value='english'>English</option>
+                                    <option value='spanish'>Spanish</option>
+                                    <option value='french'>French</option>
+                                </Select>
+                            </FormControl>
+                        </Stack>
+                    </Box>
+
+                    <Divider />
+
+                    <Box>
+                        <Heading size="md" mb={4}>Notifications</Heading>
+                        <Stack spacing={4}>
+                            <FormControl display='flex' alignItems='center'>
+                                <FormLabel mb='0'>
+                                    Email Notifications
+                                </FormLabel>
+                                <Switch colorScheme='brand' defaultChecked />
+                            </FormControl>
+                            <FormControl display='flex' alignItems='center'>
+                                <FormLabel mb='0'>
+                                    Push Notifications
+                                </FormLabel>
+                                <Switch colorScheme='brand' defaultChecked />
+                            </FormControl>
+                        </Stack>
+                    </Box>
+
+                    <Divider />
+
+                    <Box>
+                        <Heading size="md" mb={4}>Privacy</Heading>
+                        <Stack spacing={4}>
+                            <FormControl display='flex' alignItems='center'>
+                                <FormLabel mb='0'>
+                                    Show Online Status
+                                </FormLabel>
+                                <Switch colorScheme='brand' defaultChecked />
+                            </FormControl>
+                            <FormControl display='flex' alignItems='center'>
+                                <FormLabel mb='0'>
+                                    Share Usage Data
+                                </FormLabel>
+                                <Switch colorScheme='brand' />
+                            </FormControl>
+                        </Stack>
+                    </Box>
+
+                    <Button
+                        colorScheme="brand"
+                        size="lg"
+                        mt={4}
+                    >
+                        Save Changes
+                    </Button>
+                </VStack>
             </Box>
         </Flex>
     );
 };
 
-export default Dashboard;
+export default Settings;

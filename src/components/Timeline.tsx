@@ -6,6 +6,7 @@ import {
   useColorModeValue,
   Collapse,
   HStack,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import { motion, MotionProps } from "framer-motion";
 import { forwardRef } from "react";
@@ -21,27 +22,35 @@ export const MotionBox = motion(
 
 export const Timeline = () => {
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
-  const lineColor = useColorModeValue("brand.200", "brand.700"); // Subtle orange shades
-  const dotColor = useColorModeValue("brand.700", "highlight.500"); // Vibrant blue/yellow shades
-  const bgColor = useColorModeValue("brand.50", "gray.800"); // Light orange or dark gray
-  const hoverBg = useColorModeValue("brand.100", "gray.700"); // Slightly bolder hover effect
+  const lineColor = useColorModeValue("brand.200", "brand.700");
+  const dotColor = useColorModeValue("brand.700", "highlight.500");
+  const bgColor = useColorModeValue("brand.50", "gray.800");
+  const hoverBg = useColorModeValue("brand.100", "gray.700");
   const borderColor = useColorModeValue("brand.300", "brand.600");
 
+  const showTimelineDecoration = useBreakpointValue({ base: false, md: true });
+
   return (
-    <Box position="relative" pl={10} w="100%">
+    <Box position="relative" w="100%">
       {/* Vertical timeline line */}
-      <Box
-        position="absolute"
-        top={0}
-        left="8px" // Center of the dots
-        borderWidth="2px"
-        borderColor={borderColor}
-        borderRadius="lg"
-        bottom={0}
-        width="2px"
-        bg={lineColor}
-      />
-      <VStack spacing={6} align="stretch">
+      {showTimelineDecoration && (
+        <Box
+          position="absolute"
+          top={0}
+          left="8px"
+          borderWidth="2px"
+          borderColor={borderColor}
+          borderRadius="lg"
+          bottom={0}
+          width="2px"
+          bg={lineColor}
+        />
+      )}
+      <VStack
+        spacing={6}
+        align="stretch"
+        pl={showTimelineDecoration ? 10 : 0} // Adjust padding for decoration
+      >
         {timelineData.map((item, index) => (
           <MotionBox
             key={item.day}
@@ -60,18 +69,20 @@ export const Timeline = () => {
             position="relative"
           >
             {/* Dot on the timeline */}
-            <Box
-              position="absolute"
-              top="50%"
-              left="8px" // Aligns with the vertical line
-              transform="translate(-295%, -50%)"
-              width="16px"
-              height="16px"
-              bg={dotColor}
-              borderRadius="full"
-              boxShadow="md"
-            />
-            <HStack pl={6}>
+            {showTimelineDecoration && (
+              <Box
+                position="absolute"
+                top="50%"
+                left="8px"
+                transform="translate(-295%, -50%)"
+                width="16px"
+                height="16px"
+                bg={dotColor}
+                borderRadius="full"
+                boxShadow="md"
+              />
+            )}
+            <HStack pl={showTimelineDecoration ? 0 : 4}>
               {/* Content positioned to the right */}
               <Text fontWeight="bold" fontSize="lg">
                 {item.day}: {item.title}

@@ -10,6 +10,7 @@ import {
     CardHeader,
     CardBody,
     useColorModeValue,
+    useBreakpointValue,
 } from '@chakra-ui/react';
 import { analyticsData } from '../../data/dashboardData';
 
@@ -17,6 +18,11 @@ export const AnalyticsTab = () => {
     const cardBg = useColorModeValue('white', 'gray.800');
     const borderColor = useColorModeValue('brand.200', 'brand.700');
     const textColor = useColorModeValue('gray.700', 'gray.300');
+
+    const gridTemplateColumns = useBreakpointValue({
+        base: '1fr', // Single column for mobile
+        md: 'repeat(2, 1fr)', // Two columns for medium and larger screens
+    });
 
     const getStatusColor = (status?: string) => {
         if (!status) return 'green';
@@ -32,6 +38,7 @@ export const AnalyticsTab = () => {
 
     return (
         <VStack spacing={8} align="stretch">
+            {/* Test Performance Card */}
             <Card bg={cardBg} borderWidth="1px" borderColor={borderColor}>
                 <CardHeader>
                     <Heading size="md" color="brand.600">Test Performance</Heading>
@@ -74,7 +81,9 @@ export const AnalyticsTab = () => {
                 </CardBody>
             </Card>
 
-            <Grid templateColumns="repeat(2, 1fr)" gap={6}>
+            {/* Progress and Time Statistics Cards */}
+            <Grid templateColumns={gridTemplateColumns} gap={6}>
+                {/* Progress Overview Card */}
                 <Card bg={cardBg} borderWidth="1px" borderColor={borderColor}>
                     <CardHeader>
                         <Heading size="md" color="brand.600">Progress Overview</Heading>
@@ -97,6 +106,7 @@ export const AnalyticsTab = () => {
                     </CardBody>
                 </Card>
 
+                {/* Time Statistics Card */}
                 <Card bg={cardBg} borderWidth="1px" borderColor={borderColor}>
                     <CardHeader>
                         <Heading size="md" color="brand.600">Time Statistics</Heading>

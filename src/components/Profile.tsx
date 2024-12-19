@@ -57,7 +57,7 @@ const Dashboard: React.FC<Props> = ({ handleLogout }) => {
                         <Button w="full" variant="ghost" _hover={{ bg: buttonHoverBg }} onClick={() => navigateTo('/profile')}>
                             Profile
                         </Button>
-                        <Button w="full" variant="ghost" _hover={{ bg: buttonHoverBg }} onClick={() => navigateTo('/dashboard')}>
+                        <Button w="full" variant="ghost" _hover={{ bg: buttonHoverBg }} onClick={() => navigateTo('/')}>
                             Dashboard
                         </Button>
                         <Button w="full" variant="ghost" _hover={{ bg: buttonHoverBg }} onClick={() => navigateTo('/settings')}>
@@ -167,19 +167,19 @@ const Dashboard: React.FC<Props> = ({ handleLogout }) => {
                 <Tabs isFitted variant="soft-rounded" colorScheme="brand">
                     <TabList>
                         <Tab _hover={{ bg: tabHoverBg }} _selected={{ bg: 'brand.500', color: 'white' }}>
-                            Analytics
+                            Home
                         </Tab>
                         <Tab _hover={{ bg: tabHoverBg }} _selected={{ bg: 'brand.500', color: 'white' }}>
-                            Tests
+                            Reports
                         </Tab>
                     </TabList>
 
                     <TabPanels>
                         <TabPanel>
-                            <AnalyticsTab />
+                            <HomeTab />
                         </TabPanel>
                         <TabPanel>
-                            <TestDashboard />
+                            <ReportsTab />
                         </TabPanel>
                     </TabPanels>
                 </Tabs>
