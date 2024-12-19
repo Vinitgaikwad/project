@@ -36,6 +36,14 @@ export const AuthTabs: React.FC = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!passwordRegex.test(password)) {
+      setError(
+        'Password must be at least 8 characters long and include uppercase, lowercase, numbers, and special characters'
+      );
+      return;
+    }
 
     try {
       setLoading(true);
@@ -94,7 +102,7 @@ export const AuthTabs: React.FC = () => {
                 <FormControl isRequired>
                   <FormLabel>Username</FormLabel>
                   <Input
-                    type="text"
+                    type="email"
                     placeholder="Enter your username"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -114,7 +122,7 @@ export const AuthTabs: React.FC = () => {
                   />
                 </FormControl>
                 <Text fontSize="sm" color="gray.500" alignSelf="start">
-                  Demo credentials: username: project, password: 123456
+                  Demo credentials: username: project@gmail.com, password: Project@123456
                 </Text>
                 <Button
                   type="submit"
