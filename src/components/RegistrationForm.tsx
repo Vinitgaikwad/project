@@ -42,14 +42,31 @@ export const RegistrationForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!passwordRegex.test(formData.password)) {
+      setError(
+        'Password must be at least 8 characters long and include uppercase, lowercase, numbers, and special characters'
+      );
+      return;
+    }
+
+    // Validate WhatsApp number (must be 10 digits)
+    const whatsappNumberRegex = /^\d{10}$/;
+    if (!whatsappNumberRegex.test(formData.whatsappNumber)) {
+      setError('WhatsApp number must be exactly 10 digits');
+      return;
+    }
+
     if (formData.password.length < 6) {
       setError('Password must be at least 6 characters long');
       return;
     }
     try {
       setLoading(true);
+      // Auto Sign up after registration
       await signup(formData.email, formData.password);
-      // Here you would typically also save the additional user data to your database
       toast({
         title: 'Registration Successful',
         description: "You've successfully registered. Please check your email for verification.",
@@ -165,7 +182,7 @@ export const RegistrationForm = () => {
           <FormLabel>VU Account Number (optional)</FormLabel>
           <Input
             name="whatsappNumber"
-            value={formData.whatsappNumber}
+            value={formData.vuAccountNumber}
             onChange={handleChange}
             focusBorderColor="brand.500"
             placeholder="Enter your VU Account Number"
