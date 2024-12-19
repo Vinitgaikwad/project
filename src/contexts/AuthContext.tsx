@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const login = async (email: string, password: string) => {
     // Check for dummy credentials first
-    if (email === 'project' && password === '123456') {
+    if (email === 'project@gmail.com' && password === 'Project@123456') {
       // Create a mock user object that mimics Firebase User structure
       const dummyUser = {
         uid: 'dummy-uid',
