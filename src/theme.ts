@@ -5,10 +5,7 @@ const config: ThemeConfig = {
   useSystemColorMode: true,
 };
 
-<<<<<<< HEAD
-export const theme = extendTheme({
-  config,
-=======
+
 const colors = {
   brand: {
     50: '#fff3e0',
@@ -51,7 +48,6 @@ const colors = {
 export const theme = extendTheme({
   config,
   colors,
->>>>>>> vtong/main
   styles: {
     global: (props: any) => ({
       body: {
@@ -62,9 +58,6 @@ export const theme = extendTheme({
   components: {
     Button: {
       defaultProps: {
-<<<<<<< HEAD
-        colorScheme: 'blue',
-=======
         colorScheme: 'brand',
       },
     },
@@ -85,7 +78,6 @@ export const theme = extendTheme({
     Badge: {
       defaultProps: {
         colorScheme: 'brand',
->>>>>>> vtong/main
       },
     },
   },

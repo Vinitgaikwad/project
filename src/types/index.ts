@@ -9,11 +9,8 @@ export interface RegistrationFormData {
   vuAccountNumber: string;
   transactionId: string;
   transactionReceipt: File | null;
-<<<<<<< HEAD
-=======
 }
 
 export interface AuthTabsProps {
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
->>>>>>> vtong/main
 }

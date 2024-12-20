@@ -10,23 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-<<<<<<< HEAD
-    "@chakra-ui/react": "^2.8.2",
-    "@emotion/react": "^11.11.3",
-    "@emotion/styled": "^11.11.0",
-    "framer-motion": "^11.0.5",
-    "lucide-react": "^0.344.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-hook-form": "^7.50.1"
-  },
-  "devDependencies": {
-    "@eslint/js": "^9.9.1",
-    "@types/react": "^18.3.5",
-    "@types/react-dom": "^18.3.0",
-=======
     "@chakra-ui/icons": "^2.1.1",
-    "@chakra-ui/react": "^2.8.2",
+    "@chakra-ui/react": "^2.10.4",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "firebase": "^10.8.0",
@@ -41,7 +26,6 @@
     "@eslint/js": "^9.9.1",
     "@types/react": "^18.3.16",
     "@types/react-dom": "^18.3.5",
->>>>>>> vtong/main
     "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.18",
     "eslint": "^9.9.1",
