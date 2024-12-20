@@ -13,8 +13,12 @@ import {
     Alert,
     AlertIcon,
 } from '@chakra-ui/react';
+import { motion } from 'framer-motion';
 import { DownloadIcon } from '@chakra-ui/icons';
 import { reportData } from '../../data/dashboardData';
+
+const MotionCard = motion(Card);
+const MotionBox = motion(Box);
 
 export const ReportsTab = () => {
     const cardBg = useColorModeValue('white', 'gray.800');
@@ -23,7 +27,15 @@ export const ReportsTab = () => {
 
     return (
         <VStack spacing={8} align="stretch">
-            <Card bg={cardBg} borderWidth="1px" borderColor={borderColor}>
+            {/* Certificate Eligibility Card */}
+            <MotionCard
+                bg={cardBg}
+                borderWidth="1px"
+                borderColor={borderColor}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+            >
                 <CardHeader>
                     <Heading size="md" color="brand.600">Certificate Eligibility</Heading>
                 </CardHeader>
@@ -39,7 +51,12 @@ export const ReportsTab = () => {
                                 : 'Complete all required tests to become eligible for the certificate.'}
                         </Alert>
 
-                        <Box>
+                        {/* Tests Completion Progress */}
+                        <MotionBox
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.5, delay: 0.2 }}
+                        >
                             <Text mb={2}>Tests Completion</Text>
                             <Progress
                                 value={reportData.certificateStatus.completedTests}
@@ -50,9 +67,14 @@ export const ReportsTab = () => {
                                 {reportData.certificateStatus.completedTests} of{' '}
                                 {reportData.certificateStatus.requiredTests} tests completed
                             </Text>
-                        </Box>
+                        </MotionBox>
 
-                        <Box>
+                        {/* Average Score Progress */}
+                        <MotionBox
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.5, delay: 0.4 }}
+                        >
                             <Text mb={2}>Average Score</Text>
                             <Progress
                                 value={reportData.certificateStatus.currentAverageScore}
@@ -63,24 +85,35 @@ export const ReportsTab = () => {
                                 Current: {reportData.certificateStatus.currentAverageScore}% (Minimum required:{' '}
                                 {reportData.certificateStatus.minimumScore}%)
                             </Text>
-                        </Box>
+                        </MotionBox>
                     </VStack>
                 </CardBody>
-            </Card>
+            </MotionCard>
 
-            <Card bg={cardBg} borderWidth="1px" borderColor={borderColor}>
+            {/* Completed Modules Card */}
+            <MotionCard
+                bg={cardBg}
+                borderWidth="1px"
+                borderColor={borderColor}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+            >
                 <CardHeader>
                     <Heading size="md" color="brand.600">Completed Modules</Heading>
                 </CardHeader>
                 <CardBody>
                     <Grid gap={4}>
                         {reportData.completedModules.map((module, index) => (
-                            <Box
+                            <MotionBox
                                 key={index}
                                 p={4}
                                 borderWidth="1px"
                                 borderColor={borderColor}
                                 borderRadius="md"
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: 0.2 * index, duration: 0.5 }}
                             >
                                 <Grid templateColumns="1fr auto" gap={4} alignItems="center">
                                     <Box>
@@ -103,11 +136,11 @@ export const ReportsTab = () => {
                                         </Button>
                                     )}
                                 </Grid>
-                            </Box>
+                            </MotionBox>
                         ))}
                     </Grid>
                 </CardBody>
-            </Card>
+            </MotionCard>
         </VStack>
     );
 };

@@ -12,7 +12,11 @@ import {
     useColorModeValue,
     useBreakpointValue,
 } from '@chakra-ui/react';
+import { motion } from 'framer-motion';
 import { analyticsData } from '../../data/dashboardData';
+
+const MotionBox = motion(Box);
+const MotionCard = motion(Card);
 
 export const AnalyticsTab = () => {
     const cardBg = useColorModeValue('white', 'gray.800');
@@ -39,19 +43,29 @@ export const AnalyticsTab = () => {
     return (
         <VStack spacing={8} align="stretch">
             {/* Test Performance Card */}
-            <Card bg={cardBg} borderWidth="1px" borderColor={borderColor}>
+            <MotionCard
+                bg={cardBg}
+                borderWidth="1px"
+                borderColor={borderColor}
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+            >
                 <CardHeader>
                     <Heading size="md" color="brand.600">Test Performance</Heading>
                 </CardHeader>
                 <CardBody>
                     <VStack spacing={4} align="stretch">
                         {analyticsData.testPerformance.map((test, index) => (
-                            <Box
+                            <MotionBox
                                 key={index}
                                 p={4}
                                 borderWidth="1px"
                                 borderColor={borderColor}
                                 borderRadius="md"
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: 0.1 * index, duration: 0.3 }}
                             >
                                 <Grid templateColumns="1fr auto" gap={4} alignItems="center">
                                     <Box>
@@ -75,16 +89,23 @@ export const AnalyticsTab = () => {
                                         </Text>
                                     )}
                                 </Grid>
-                            </Box>
+                            </MotionBox>
                         ))}
                     </VStack>
                 </CardBody>
-            </Card>
+            </MotionCard>
 
             {/* Progress and Time Statistics Cards */}
             <Grid templateColumns={gridTemplateColumns} gap={6}>
                 {/* Progress Overview Card */}
-                <Card bg={cardBg} borderWidth="1px" borderColor={borderColor}>
+                <MotionCard
+                    bg={cardBg}
+                    borderWidth="1px"
+                    borderColor={borderColor}
+                    initial={{ opacity: 0, y: 50 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                >
                     <CardHeader>
                         <Heading size="md" color="brand.600">Progress Overview</Heading>
                     </CardHeader>
@@ -104,10 +125,17 @@ export const AnalyticsTab = () => {
                             </Box>
                         </VStack>
                     </CardBody>
-                </Card>
+                </MotionCard>
 
                 {/* Time Statistics Card */}
-                <Card bg={cardBg} borderWidth="1px" borderColor={borderColor}>
+                <MotionCard
+                    bg={cardBg}
+                    borderWidth="1px"
+                    borderColor={borderColor}
+                    initial={{ opacity: 0, y: 50 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                >
                     <CardHeader>
                         <Heading size="md" color="brand.600">Time Statistics</Heading>
                     </CardHeader>
@@ -127,7 +155,7 @@ export const AnalyticsTab = () => {
                             </Box>
                         </VStack>
                     </CardBody>
-                </Card>
+                </MotionCard>
             </Grid>
         </VStack>
     );

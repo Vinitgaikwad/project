@@ -135,15 +135,22 @@ export const TestDashboard = () => {
                                 </Heading>
                                 <List spacing={2}>
                                     {selectedTest.resources.map((resource, index) => (
-                                        <ListItem key={index}>
-                                            <Link
-                                                color="blue.500"
-                                                href="#"
-                                                _hover={{ textDecoration: 'underline' }}
-                                            >
-                                                {resource}
-                                            </Link>
-                                        </ListItem>
+                                        <MotionBox
+                                            key={index}
+                                            initial={{ opacity: 0, y: 20 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ delay: index * 0.1 }}
+                                        >
+                                            <ListItem>
+                                                <Link
+                                                    color="blue.500"
+                                                    href="#"
+                                                    _hover={{ textDecoration: 'underline' }}
+                                                >
+                                                    {resource}
+                                                </Link>
+                                            </ListItem>
+                                        </MotionBox>
                                     ))}
                                 </List>
                             </Box>

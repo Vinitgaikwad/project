@@ -5,9 +5,7 @@ import {
     IconButton,
     Tabs,
     TabList,
-    TabPanels,
     Tab,
-    TabPanel,
     Button,
     VStack,
     useColorModeValue,
@@ -18,12 +16,11 @@ import {
     DrawerContent,
     DrawerCloseButton,
     useBreakpointValue,
-    Collapse
+    Collapse,
+    useColorMode
 } from '@chakra-ui/react';
-import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
+import { HamburgerIcon, CloseIcon, MoonIcon, SunIcon } from '@chakra-ui/icons';
 import { HomeTab } from './dashboard/HomeTab';
-import { AnalyticsTab } from './dashboard/AnalyticsTab';
-import { TestDashboard } from './dashboard/TestDashboard';
 import { ReportsTab } from './dashboard/ReportsTab';
 import { useNavigate } from 'react-router-dom';
 
@@ -31,9 +28,12 @@ interface Props {
     handleLogout: () => Promise<void>;
 }
 
+
 const Dashboard: React.FC<Props> = ({ handleLogout }) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [activeTab, setActiveTab] = useState('home'); // State to manage active tab
     const sidebarBg = useColorModeValue('brand.50', 'gray.800');
+    const { colorMode, toggleColorMode } = useColorMode();
     const mainBg = useColorModeValue('gray.50', 'gray.900');
     const buttonHoverBg = useColorModeValue('brand.100', 'brand.800');
     const tabHoverBg = useColorModeValue('brand.50', 'brand.900');
@@ -43,8 +43,21 @@ const Dashboard: React.FC<Props> = ({ handleLogout }) => {
 
     const navigateTo = (path: string) => {
         navigate(path);
-        setIsSidebarOpen(false); // Close the sidebar after navigation
+        setIsSidebarOpen(false);
     };
+
+    const ColorModeButton = () => (
+        <IconButton
+            aria-label="Toggle color mode"
+            icon={colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
+            onClick={toggleColorMode}
+            w="full"
+            variant="ghost"
+            _hover={{ bg: buttonHoverBg }}
+            size="lg"
+            colorScheme="brand"
+        />
+    );
 
     const MobileSidebar = () => (
         <Drawer isOpen={isSidebarOpen} placement="left" onClose={() => setIsSidebarOpen(false)}>
@@ -57,12 +70,13 @@ const Dashboard: React.FC<Props> = ({ handleLogout }) => {
                         <Button w="full" variant="ghost" _hover={{ bg: buttonHoverBg }} onClick={() => navigateTo('/profile')}>
                             Profile
                         </Button>
-                        <Button w="full" variant="ghost" _hover={{ bg: buttonHoverBg }} onClick={() => navigateTo('/')}>
+                        <Button w="full" variant="ghost" _hover={{ bg: buttonHoverBg }} onClick={() => navigateTo('/dashboard')}>
                             Dashboard
                         </Button>
                         <Button w="full" variant="ghost" _hover={{ bg: buttonHoverBg }} onClick={() => navigateTo('/settings')}>
                             Settings
                         </Button>
+                        <ColorModeButton />
                         <Button
                             colorScheme="red"
                             w="full"
@@ -111,6 +125,7 @@ const Dashboard: React.FC<Props> = ({ handleLogout }) => {
                         <Button w="full" variant="ghost" _hover={{ bg: buttonHoverBg }} onClick={() => navigateTo('/settings')}>
                             Settings
                         </Button>
+                        <ColorModeButton />
                     </VStack>
                 </Collapse>
                 {isSidebarOpen && (
@@ -166,23 +181,28 @@ const Dashboard: React.FC<Props> = ({ handleLogout }) => {
             >
                 <Tabs isFitted variant="soft-rounded" colorScheme="brand">
                     <TabList>
-                        <Tab _hover={{ bg: tabHoverBg }} _selected={{ bg: 'brand.500', color: 'white' }}>
+                        <Tab
+                            _hover={{ bg: tabHoverBg }}
+                            _selected={{ bg: 'brand.500', color: 'white' }}
+                            onClick={() => setActiveTab('home')}
+                        >
                             Home
                         </Tab>
-                        <Tab _hover={{ bg: tabHoverBg }} _selected={{ bg: 'brand.500', color: 'white' }}>
+                        <Tab
+                            _hover={{ bg: tabHoverBg }}
+                            _selected={{ bg: 'brand.500', color: 'white' }}
+                            onClick={() => setActiveTab('reports')}
+                        >
                             Reports
                         </Tab>
                     </TabList>
-
-                    <TabPanels>
-                        <TabPanel>
-                            <HomeTab />
-                        </TabPanel>
-                        <TabPanel>
-                            <ReportsTab />
-                        </TabPanel>
-                    </TabPanels>
                 </Tabs>
+
+                {/* Render all components and conditionally show them */}
+                <Box mt={4}>
+                    {activeTab === 'home' && <HomeTab />}
+                    {activeTab === 'reports' && <ReportsTab />}
+                </Box>
             </Box>
         </Flex>
     );

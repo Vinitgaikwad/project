@@ -14,7 +14,12 @@ import {
     useColorModeValue,
     useBreakpointValue,
 } from '@chakra-ui/react';
+import { motion } from 'framer-motion';
 import { homeData } from '../../data/dashboardData';
+
+const MotionBox = motion(Box);
+const MotionCard = motion(Card);
+const MotionStat = motion(Stat);
 
 export const HomeTab = () => {
     const cardBg = useColorModeValue('white', 'gray.800');
@@ -30,14 +35,18 @@ export const HomeTab = () => {
     return (
         <VStack spacing={8} align="stretch">
             {/* Welcome Message */}
-            <Box>
+            <MotionBox
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+            >
                 <Heading size="lg" mb={2} color="brand.600">
                     {homeData.welcomeMessage}
                 </Heading>
                 <Text color={textColor}>
                     Track your progress and manage your learning journey
                 </Text>
-            </Box>
+            </MotionBox>
 
             {/* Quick Stats */}
             <StatGroup width="100%">
@@ -46,68 +55,61 @@ export const HomeTab = () => {
                     gap={4}
                     width="100%"
                 >
-                    <Stat
-                        p={4}
-                        bg={cardBg}
-                        borderRadius="lg"
-                        borderWidth="1px"
-                        borderColor={borderColor}
-                        width="100%"
-                    >
-                        <StatLabel>Completed Tests</StatLabel>
-                        <StatNumber color="brand.500">{homeData.quickStats.completedTests}</StatNumber>
-                    </Stat>
-                    <Stat
-                        p={4}
-                        bg={cardBg}
-                        borderRadius="lg"
-                        borderWidth="1px"
-                        borderColor={borderColor}
-                        width="100%"
-                    >
-                        <StatLabel>Upcoming Tests</StatLabel>
-                        <StatNumber color="brand.500">{homeData.quickStats.upcomingTests}</StatNumber>
-                    </Stat>
-                    <Stat
-                        p={4}
-                        bg={cardBg}
-                        borderRadius="lg"
-                        borderWidth="1px"
-                        borderColor={borderColor}
-                        width="100%"
-                    >
-                        <StatLabel>Average Score</StatLabel>
-                        <StatNumber color="brand.500">{homeData.quickStats.averageScore}%</StatNumber>
-                    </Stat>
+                    {Object.entries(homeData.quickStats).map(([label, value], index) => (
+                        <MotionStat
+                            key={label}
+                            p={4}
+                            bg={cardBg}
+                            borderRadius="lg"
+                            borderWidth="1px"
+                            borderColor={borderColor}
+                            width="100%"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.2 * index, duration: 0.5 }}
+                        >
+                            <StatLabel>{label.replace(/([A-Z])/g, ' $1')}</StatLabel>
+                            <StatNumber color="brand.500">{value}</StatNumber>
+                        </MotionStat>
+                    ))}
                 </Grid>
             </StatGroup>
 
-
             {/* Upcoming Events */}
-            <Card bg={cardBg} borderWidth="1px" borderColor={borderColor}>
+            <MotionCard
+                bg={cardBg}
+                borderWidth="1px"
+                borderColor={borderColor}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+            >
                 <CardHeader>
                     <Heading size="md" color="brand.600">Upcoming Events</Heading>
                 </CardHeader>
                 <CardBody>
                     <VStack spacing={4} align="stretch">
                         {homeData.upcomingEvents.map((event, index) => (
-                            <Box
+                            <MotionBox
                                 key={index}
                                 p={4}
                                 borderWidth="1px"
                                 borderColor={borderColor}
                                 borderRadius="md"
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: 0.2 * index, duration: 0.5 }}
                             >
                                 <Text fontWeight="bold" color="brand.500">{event.title}</Text>
                                 <Text fontSize="sm" color={textColor}>
                                     {event.date} at {event.time}
                                 </Text>
                                 <Text mt={2} color={textColor}>{event.description}</Text>
-                            </Box>
+                            </MotionBox>
                         ))}
                     </VStack>
                 </CardBody>
-            </Card>
+            </MotionCard>
         </VStack>
     );
 };
