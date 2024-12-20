@@ -14,35 +14,101 @@ import {
     useBreakpointValue,
     Collapse,
     Button,
-    Heading,
     FormControl,
     FormLabel,
     Switch,
-    Divider,
     Text,
     Select,
-    Stack,
+    Textarea,
+    Tabs,
+    TabList,
+    TabPanels,
+    Tab,
+    TabPanel,
+    Badge,
+    List,
+    ListItem,
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
 import { useNavigate } from 'react-router-dom';
+import { notificationData } from '../data/settingsData'; // Import your settings data
 
 interface Props {
     handleLogout: () => Promise<void>;
 }
 
 const Settings: React.FC<Props> = ({ handleLogout }) => {
+    // States for sidebar
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+    // States for issue reporting
+    const [issueType, setIssueType] = useState('');
+    const [issueDescription, setIssueDescription] = useState('');
+
+    // States for notifications
+    const [notifications, setNotifications] = useState(notificationData.notifications);
+    const [notificationSettings, setNotificationSettings] = useState(notificationData.settings);
+
+    // Theme colors
     const sidebarBg = useColorModeValue('brand.50', 'gray.800');
     const mainBg = useColorModeValue('gray.50', 'gray.900');
     const buttonHoverBg = useColorModeValue('brand.100', 'brand.800');
-    const navigate = useNavigate();
+    const tabHoverBg = useColorModeValue('brand.50', 'brand.900');
 
     const isMobile = useBreakpointValue({ base: true, lg: false });
+    const navigate = useNavigate();
 
+    // Navigation function
     const navigateTo = (path: string) => {
         navigate(path);
         setIsSidebarOpen(false);
     };
+
+    // Handlers
+    const handleSubmitIssue = () => {
+        console.log('Issue submitted:', { issueType, issueDescription });
+        setIssueType('');
+        setIssueDescription('');
+    };
+
+    const handleNotificationRead = (id: string) => {
+        setNotifications(notifications.map(notification =>
+            notification.id === id
+                ? { ...notification, isRead: true }
+                : notification
+        ));
+    };
+
+    const handleSettingChange = (setting: 'emailEnabled' | 'pushEnabled') => {
+        setNotificationSettings(prev => ({
+            ...prev,
+            [setting]: !prev[setting]
+        }));
+    };
+
+    // Sidebar Components
+    const MobileHeader = () => (
+        <Flex
+            position="fixed"
+            top="0"
+            left="0"
+            right="0"
+            zIndex="1000"
+            bg={mainBg}
+            p={2}
+            display={{ lg: 'none' }}
+            alignItems="center"
+            boxShadow="sm"
+        >
+            <IconButton
+                aria-label="Open Menu"
+                icon={<HamburgerIcon />}
+                onClick={() => setIsSidebarOpen(true)}
+                variant="ghost"
+                colorScheme="brand"
+            />
+        </Flex>
+    );
 
     const MobileSidebar = () => (
         <Drawer isOpen={isSidebarOpen} placement="left" onClose={() => setIsSidebarOpen(false)}>
@@ -52,23 +118,16 @@ const Settings: React.FC<Props> = ({ handleLogout }) => {
                 <DrawerHeader textAlign="center">Menu</DrawerHeader>
                 <DrawerBody>
                     <VStack align="stretch" spacing={4}>
-                        <Button w="full" variant="ghost" _hover={{ bg: buttonHoverBg }} onClick={() => navigateTo('/profile')}>
+                        <Button w="full" variant="ghost" onClick={() => navigateTo('/profile')}>
                             Profile
                         </Button>
-                        <Button w="full" variant="ghost" _hover={{ bg: buttonHoverBg }} onClick={() => navigateTo('/dashboard')}>
+                        <Button w="full" variant="ghost" onClick={() => navigateTo('/dashboard')}>
                             Dashboard
                         </Button>
-                        <Button w="full" variant="ghost" _hover={{ bg: buttonHoverBg }} onClick={() => navigateTo('/settings')}>
+                        <Button w="full" variant="ghost" onClick={() => navigateTo('/settings')}>
                             Settings
                         </Button>
-                        <Button
-                            colorScheme="red"
-                            w="full"
-                            size="lg"
-                            onClick={handleLogout}
-                            _hover={{ bg: 'red.600' }}
-                            mt={4}
-                        >
+                        <Button colorScheme="red" w="full" onClick={handleLogout}>
                             Logout
                         </Button>
                     </VStack>
@@ -96,60 +155,34 @@ const Settings: React.FC<Props> = ({ handleLogout }) => {
                     size="lg"
                     colorScheme="brand"
                     variant="ghost"
-                    _hover={{ bg: buttonHoverBg }}
                 />
                 <Collapse in={isSidebarOpen} animateOpacity>
                     <VStack align="stretch" mt={8} spacing={4} px={4}>
-                        <Button w="full" variant="ghost" _hover={{ bg: buttonHoverBg }} onClick={() => navigateTo('/profile')}>
+                        <Button w="full" variant="ghost" onClick={() => navigateTo('/profile')}>
                             Profile
                         </Button>
-                        <Button w="full" variant="ghost" _hover={{ bg: buttonHoverBg }} onClick={() => navigateTo('/dashboard')}>
+                        <Button w="full" variant="ghost" onClick={() => navigateTo('/dashboard')}>
                             Dashboard
                         </Button>
-                        <Button w="full" variant="ghost" _hover={{ bg: buttonHoverBg }} onClick={() => navigateTo('/settings')}>
+                        <Button w="full" variant="ghost" onClick={() => navigateTo('/settings')}>
                             Settings
                         </Button>
                     </VStack>
                 </Collapse>
                 {isSidebarOpen && (
-                    <Flex mt="auto" mb={4} px={4}>
-                        <Button
-                            colorScheme="red"
-                            w="full"
-                            size="lg"
-                            onClick={handleLogout}
-                            _hover={{ bg: 'red.600' }}
-                            boxShadow="md"
-                        >
-                            Logout
-                        </Button>
-                    </Flex>
+                    <Button
+                        colorScheme="red"
+                        w="90%"
+                        mx="5%"
+                        mt="auto"
+                        mb={4}
+                        onClick={handleLogout}
+                    >
+                        Logout
+                    </Button>
                 )}
             </VStack>
         </Box>
-    );
-
-    const MobileHeader = () => (
-        <Flex
-            position="fixed"
-            top="0"
-            left="0"
-            right="0"
-            zIndex="1000"
-            bg={mainBg}
-            p={2}
-            display={{ lg: 'none' }}
-            alignItems="center"
-            boxShadow="sm"
-        >
-            <IconButton
-                aria-label="Open Menu"
-                icon={<HamburgerIcon />}
-                onClick={() => setIsSidebarOpen(true)}
-                variant="ghost"
-                colorScheme="brand"
-            />
-        </Flex>
     );
 
     return (
@@ -159,81 +192,103 @@ const Settings: React.FC<Props> = ({ handleLogout }) => {
             <DesktopSidebar />
             <Box
                 flex="1"
-                p={6}
-                pt={{ base: isMobile ? '60px' : 6, lg: 6 }}
-                overflowY="auto"
+                p={4}
+                pt={{ base: isMobile ? '60px' : 4, lg: 4 }}
             >
-                <VStack spacing={8} align="stretch">
-                    <Heading size="lg">Settings</Heading>
+                <Tabs isFitted variant="soft-rounded" colorScheme="brand">
+                    <TabList>
+                        <Tab
+                            _hover={{ bg: tabHoverBg }}
+                            _selected={{ bg: 'brand.500', color: 'white' }}
+                        >
+                            Report Issue
+                        </Tab>
+                        <Tab
+                            _hover={{ bg: tabHoverBg }}
+                            _selected={{ bg: 'brand.500', color: 'white' }}
+                        >
+                            Notifications
+                            <Badge ml={2} colorScheme="red" borderRadius="full">
+                                {notifications.filter(n => !n.isRead).length}
+                            </Badge>
+                        </Tab>
+                    </TabList>
 
-                    <Box>
-                        <Heading size="md" mb={4}>Appearance</Heading>
-                        <Stack spacing={4}>
-                            <FormControl display='flex' alignItems='center'>
-                                <FormLabel mb='0'>
-                                    Dark Mode
-                                </FormLabel>
-                                <Switch colorScheme='brand' />
-                            </FormControl>
-                            <FormControl>
-                                <FormLabel>Language</FormLabel>
-                                <Select defaultValue='english'>
-                                    <option value='english'>English</option>
-                                    <option value='spanish'>Spanish</option>
-                                    <option value='french'>French</option>
-                                </Select>
-                            </FormControl>
-                        </Stack>
-                    </Box>
+                    <TabPanels>
+                        <TabPanel>
+                            <VStack spacing={6} align="stretch">
+                                <FormControl isRequired>
+                                    <FormLabel>Issue Type</FormLabel>
+                                    <Select
+                                        placeholder="Select issue type"
+                                        value={issueType}
+                                        onChange={(e) => setIssueType(e.target.value)}
+                                    >
+                                        <option value="bug">Bug Report</option>
+                                        <option value="assessment">Test Assessment Issue</option>
+                                        <option value="content">Content Error</option>
+                                        <option value="feature">Feature Request</option>
+                                        <option value="other">Other</option>
+                                    </Select>
+                                </FormControl>
+                                <FormControl isRequired>
+                                    <FormLabel>Description</FormLabel>
+                                    <Textarea
+                                        placeholder="Please describe the issue in detail..."
+                                        value={issueDescription}
+                                        onChange={(e) => setIssueDescription(e.target.value)}
+                                        minHeight="200px"
+                                    />
+                                </FormControl>
+                                <Button
+                                    colorScheme="brand"
+                                    onClick={handleSubmitIssue}
+                                    isDisabled={!issueType || !issueDescription}
+                                >
+                                    Submit Issue
+                                </Button>
+                            </VStack>
+                        </TabPanel>
 
-                    <Divider />
-
-                    <Box>
-                        <Heading size="md" mb={4}>Notifications</Heading>
-                        <Stack spacing={4}>
-                            <FormControl display='flex' alignItems='center'>
-                                <FormLabel mb='0'>
-                                    Email Notifications
-                                </FormLabel>
-                                <Switch colorScheme='brand' defaultChecked />
-                            </FormControl>
-                            <FormControl display='flex' alignItems='center'>
-                                <FormLabel mb='0'>
-                                    Push Notifications
-                                </FormLabel>
-                                <Switch colorScheme='brand' defaultChecked />
-                            </FormControl>
-                        </Stack>
-                    </Box>
-
-                    <Divider />
-
-                    <Box>
-                        <Heading size="md" mb={4}>Privacy</Heading>
-                        <Stack spacing={4}>
-                            <FormControl display='flex' alignItems='center'>
-                                <FormLabel mb='0'>
-                                    Show Online Status
-                                </FormLabel>
-                                <Switch colorScheme='brand' defaultChecked />
-                            </FormControl>
-                            <FormControl display='flex' alignItems='center'>
-                                <FormLabel mb='0'>
-                                    Share Usage Data
-                                </FormLabel>
-                                <Switch colorScheme='brand' />
-                            </FormControl>
-                        </Stack>
-                    </Box>
-
-                    <Button
-                        colorScheme="brand"
-                        size="lg"
-                        mt={4}
-                    >
-                        Save Changes
-                    </Button>
-                </VStack>
+                        <TabPanel>
+                            <VStack spacing={6} align="stretch">
+                                <List spacing={3}>
+                                    {notifications.map(notification => (
+                                        <ListItem
+                                            key={notification.id}
+                                            p={3}
+                                            bg={notification.isRead ? "gray.50" : "gray.100"}
+                                            borderRadius="md"
+                                            onClick={() => handleNotificationRead(notification.id)}
+                                            cursor="pointer"
+                                            transition="all 0.2s"
+                                            _hover={{ bg: "gray.200" }}
+                                        >
+                                            <Text fontWeight="bold">{notification.title}</Text>
+                                            <Text fontSize="sm">{notification.message}</Text>
+                                        </ListItem>
+                                    ))}
+                                </List>
+                                <FormControl display='flex' alignItems='center'>
+                                    <FormLabel mb='0'>Email Notifications</FormLabel>
+                                    <Switch
+                                        colorScheme='brand'
+                                        isChecked={notificationSettings.emailEnabled}
+                                        onChange={() => handleSettingChange('emailEnabled')}
+                                    />
+                                </FormControl>
+                                <FormControl display='flex' alignItems='center'>
+                                    <FormLabel mb='0'>Push Notifications</FormLabel>
+                                    <Switch
+                                        colorScheme='brand'
+                                        isChecked={notificationSettings.pushEnabled}
+                                        onChange={() => handleSettingChange('pushEnabled')}
+                                    />
+                                </FormControl>
+                            </VStack>
+                        </TabPanel>
+                    </TabPanels>
+                </Tabs>
             </Box>
         </Flex>
     );
