@@ -4,12 +4,23 @@ import { Timeline } from './Timeline';
 
 export const InfoSection = () => {
   const bgColor = useColorModeValue('white', 'gray.800');
+<<<<<<< HEAD
   const headingColor = useColorModeValue('blue.700', 'blue.200');
   const textColor = useColorModeValue('gray.700', 'gray.300');
   const iconColor = useColorModeValue('#2B6CB0', '#90CDF4');
 
   return (
     <Box p={8} bg={bgColor} borderRadius="lg" shadow="lg" height="100%">
+=======
+  const borderColor = useColorModeValue('brand.200', 'brand.700');
+  const headingColor = useColorModeValue('brand.700', 'brand.300');
+  const textColor = useColorModeValue('gray.800', 'gray.300');
+  const iconColor = useColorModeValue('accent.600', 'highlight.300');
+
+
+  return (
+    <Box p={8} bg={bgColor} borderRadius="lg" shadow="lg" height="100%" borderColor={borderColor} borderWidth="1px">
+>>>>>>> vtong/main
       <VStack spacing={6} align="start">
         <Box display="flex" alignItems="center" gap={3}>
           <GraduationCap size={32} color={iconColor} />
@@ -29,6 +40,7 @@ export const InfoSection = () => {
           </Heading>
           <Timeline />
         </Box>
+<<<<<<< HEAD
 
         <Box>
           <Heading size="md" color={headingColor} mb={2}>
@@ -40,6 +52,8 @@ export const InfoSection = () => {
             Academia: ₹2,500
           </Text>
         </Box>
+=======
+>>>>>>> vtong/main
       </VStack>
     </Box>
   );
