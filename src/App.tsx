@@ -28,7 +28,7 @@ function App() {
           path="/"
           element={
             currentUser ? (
-              <Navigate to="/dashboard" replace /> // Redirect to dashboard if logged in
+              <Navigate to="/profile" replace /> // Redirect to dashboard if logged in
             ) : (
               <Box bg={bgColor} minH="100vh" py={8} display="flex" flexDirection="column">
                 <ColorModeToggle />
@@ -84,6 +84,17 @@ function App() {
             )
           }
         />
+        {/* Dashboard page */}
+        <Route
+          path="/settings"
+          element={
+            !currentUser ? (
+              <Navigate to="/" replace />
+            ) : (
+              <Settings handleLogout={handleLogout} />
+            )
+          }
+        />
 
         {/* Dashboard page */}
         <Route
@@ -97,17 +108,7 @@ function App() {
           }
         />
 
-        {/* Dashboard page */}
-        <Route
-          path="/settings"
-          element={
-            !currentUser ? (
-              <Navigate to="/" replace />
-            ) : (
-              <Settings handleLogout={handleLogout} />
-            )
-          }
-        />
+
       </Routes>
     </Router>
   );
