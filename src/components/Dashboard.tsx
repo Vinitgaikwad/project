@@ -18,13 +18,12 @@ import {
     DrawerContent,
     DrawerCloseButton,
     useBreakpointValue,
-    Collapse
+    Collapse,
+    useColorMode
 } from '@chakra-ui/react';
-import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
-import { HomeTab } from './dashboard/HomeTab';
+import { HamburgerIcon, CloseIcon, SunIcon, MoonIcon } from '@chakra-ui/icons';
 import { AnalyticsTab } from './dashboard/AnalyticsTab';
 import { TestDashboard } from './dashboard/TestDashboard';
-import { ReportsTab } from './dashboard/ReportsTab';
 import { useNavigate } from 'react-router-dom';
 
 interface Props {
@@ -33,6 +32,8 @@ interface Props {
 
 const Dashboard: React.FC<Props> = ({ handleLogout }) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [activeTabIndex, setActiveTabIndex] = useState(0);
+    const { colorMode, toggleColorMode } = useColorMode();
     const sidebarBg = useColorModeValue('brand.50', 'gray.800');
     const mainBg = useColorModeValue('gray.50', 'gray.900');
     const buttonHoverBg = useColorModeValue('brand.100', 'brand.800');
@@ -43,8 +44,21 @@ const Dashboard: React.FC<Props> = ({ handleLogout }) => {
 
     const navigateTo = (path: string) => {
         navigate(path);
-        setIsSidebarOpen(false); // Close the sidebar after navigation
+        setIsSidebarOpen(false);
     };
+
+    const ColorModeButton = () => (
+        <IconButton
+            aria-label="Toggle color mode"
+            icon={colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
+            onClick={toggleColorMode}
+            w="full"
+            variant="ghost"
+            _hover={{ bg: buttonHoverBg }}
+            size="lg"
+            colorScheme="brand"
+        />
+    );
 
     const MobileSidebar = () => (
         <Drawer isOpen={isSidebarOpen} placement="left" onClose={() => setIsSidebarOpen(false)}>
@@ -63,6 +77,7 @@ const Dashboard: React.FC<Props> = ({ handleLogout }) => {
                         <Button w="full" variant="ghost" _hover={{ bg: buttonHoverBg }} onClick={() => navigateTo('/settings')}>
                             Settings
                         </Button>
+                        <ColorModeButton />
                         <Button
                             colorScheme="red"
                             w="full"
@@ -111,6 +126,7 @@ const Dashboard: React.FC<Props> = ({ handleLogout }) => {
                         <Button w="full" variant="ghost" _hover={{ bg: buttonHoverBg }} onClick={() => navigateTo('/settings')}>
                             Settings
                         </Button>
+                        <ColorModeButton />
                     </VStack>
                 </Collapse>
                 {isSidebarOpen && (
@@ -164,7 +180,13 @@ const Dashboard: React.FC<Props> = ({ handleLogout }) => {
                 p={4}
                 pt={{ base: isMobile ? '60px' : 4, lg: 4 }}
             >
-                <Tabs isFitted variant="soft-rounded" colorScheme="brand">
+                <Tabs
+                    isFitted
+                    variant="soft-rounded"
+                    colorScheme="brand"
+                    index={activeTabIndex}
+                    onChange={(index) => setActiveTabIndex(index)}
+                >
                     <TabList>
                         <Tab _hover={{ bg: tabHoverBg }} _selected={{ bg: 'brand.500', color: 'white' }}>
                             Analytics
@@ -175,10 +197,10 @@ const Dashboard: React.FC<Props> = ({ handleLogout }) => {
                     </TabList>
 
                     <TabPanels>
-                        <TabPanel>
+                        <TabPanel key={activeTabIndex === 0 ? 'analytics' : undefined}>
                             <AnalyticsTab />
                         </TabPanel>
-                        <TabPanel>
+                        <TabPanel key={activeTabIndex === 1 ? 'tests' : undefined}>
                             <TestDashboard />
                         </TabPanel>
                     </TabPanels>

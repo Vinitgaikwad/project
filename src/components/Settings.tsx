@@ -28,8 +28,9 @@ import {
     Badge,
     List,
     ListItem,
+    useColorMode
 } from '@chakra-ui/react';
-import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
+import { HamburgerIcon, CloseIcon, MoonIcon, SunIcon } from '@chakra-ui/icons';
 import { useNavigate } from 'react-router-dom';
 import { notificationData } from '../data/settingsData'; // Import your settings data
 
@@ -40,6 +41,8 @@ interface Props {
 const Settings: React.FC<Props> = ({ handleLogout }) => {
     // States for sidebar
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const { colorMode, toggleColorMode } = useColorMode();
+    const buttonHoverBg = useColorModeValue('brand.100', 'brand.800');
 
     // States for issue reporting
     const [issueType, setIssueType] = useState('');
@@ -52,7 +55,6 @@ const Settings: React.FC<Props> = ({ handleLogout }) => {
     // Theme colors
     const sidebarBg = useColorModeValue('brand.50', 'gray.800');
     const mainBg = useColorModeValue('gray.50', 'gray.900');
-    const buttonHoverBg = useColorModeValue('brand.100', 'brand.800');
     const tabHoverBg = useColorModeValue('brand.50', 'brand.900');
 
     const isMobile = useBreakpointValue({ base: true, lg: false });
@@ -85,6 +87,19 @@ const Settings: React.FC<Props> = ({ handleLogout }) => {
             [setting]: !prev[setting]
         }));
     };
+
+    const ColorModeButton = () => (
+        <IconButton
+            aria-label="Toggle color mode"
+            icon={colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
+            onClick={toggleColorMode}
+            w="full"
+            variant="ghost"
+            _hover={{ bg: buttonHoverBg }}
+            size="lg"
+            colorScheme="brand"
+        />
+    );
 
     // Sidebar Components
     const MobileHeader = () => (
@@ -127,6 +142,7 @@ const Settings: React.FC<Props> = ({ handleLogout }) => {
                         <Button w="full" variant="ghost" onClick={() => navigateTo('/settings')}>
                             Settings
                         </Button>
+                        <ColorModeButton />
                         <Button colorScheme="red" w="full" onClick={handleLogout}>
                             Logout
                         </Button>
@@ -167,6 +183,7 @@ const Settings: React.FC<Props> = ({ handleLogout }) => {
                         <Button w="full" variant="ghost" onClick={() => navigateTo('/settings')}>
                             Settings
                         </Button>
+                        <ColorModeButton />
                     </VStack>
                 </Collapse>
                 {isSidebarOpen && (
@@ -201,7 +218,7 @@ const Settings: React.FC<Props> = ({ handleLogout }) => {
                             _hover={{ bg: tabHoverBg }}
                             _selected={{ bg: 'brand.500', color: 'white' }}
                         >
-                            Report Issue
+                            Issues
                         </Tab>
                         <Tab
                             _hover={{ bg: tabHoverBg }}
@@ -236,6 +253,7 @@ const Settings: React.FC<Props> = ({ handleLogout }) => {
                                     <Textarea
                                         placeholder="Please describe the issue in detail..."
                                         value={issueDescription}
+                                        focusBorderColor='brand'
                                         onChange={(e) => setIssueDescription(e.target.value)}
                                         minHeight="200px"
                                     />
@@ -257,12 +275,12 @@ const Settings: React.FC<Props> = ({ handleLogout }) => {
                                         <ListItem
                                             key={notification.id}
                                             p={3}
-                                            bg={notification.isRead ? "gray.50" : "gray.100"}
+                                            bg={notification.isRead ? "brand.200" : "brand.300"}
                                             borderRadius="md"
                                             onClick={() => handleNotificationRead(notification.id)}
                                             cursor="pointer"
                                             transition="all 0.2s"
-                                            _hover={{ bg: "gray.200" }}
+                                            _hover={{ bg: "brand.200" }}
                                         >
                                             <Text fontWeight="bold">{notification.title}</Text>
                                             <Text fontSize="sm">{notification.message}</Text>
